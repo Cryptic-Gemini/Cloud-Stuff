@@ -1,0 +1,145 @@
+
+
+
+                                      
+
+                                              Creating Certs Through Openssl
+
+                                             ---------------------------------
+
+
+
+openssl version -a
+
+Generating Your Private Key:
+----------------------------
+
+openssl genrsa -out yourdomain.key 2048
+
+cat yourdomain.key
+
+openssl rsa -text -in yourdomain.key -noout
+
+
+Extracting Your Public Key:
+--------------------------
+
+openssl rsa -in yourdomain.key -pubout -out yourdomain_public.key
+
+
+Creating Your CSR:
+-----------------
+
+openssl req -new -key yourdomain.key -out yourdomain.csr
+
+
+After entering the command, you will be asked series of questions. Your answers to these questions will be embedded in the CSR. Answer the questions as described below:
+
+Country Name (2 letter code)	The two-letter country code where your company is legally located.
+
+State or Province Name (full name)	The state/province where your company is legally located.
+
+Locality Name (e.g., city)	The city where your company is legally located.
+
+Organization Name (e.g., company)	Your company's legally registered name (e.g., YourCompany, Inc.).
+
+Organizational Unit Name (e.g., section)	The name of your department within the organization. (You can leave this option blank; simply press Enter.)
+
+Common Name (e.g., server FQDN)	The fully-qualified domain name (FQDN) (e.g., www.example.com).
+
+Email Address	Your email address. (You can leave this option blank; simply press Enter.)
+
+A challenge password	Leave this option blank (simply press Enter).
+
+An optional company name	Leave this option blank (simply press Enter).
+
+
+Some of the above CSR questions have default values that will be used if you leave the answer blank and press Enter. These default values are pulled from the OpenSSL configuration file located in the OPENSSLDIR (see Checking Your OpenSSL Version). If you want to leave a question blank without using the default value, type a "." (period) and press Enter.
+
+
+
+Verifying CSR Information:
+--------------------------
+
+openssl req -text -in yourdomain.csr -noout -verify
+
+
+
+cat yourdomain.csr
+
+
+Viewing Certificate Information:
+-------------------------------
+
+openssl x509 -text -in yourdomain.crt -noout
+
+
+
+Verifying Your Keys Match:
+-------------------------
+
+
+To verify that your public and private keys match, use the -modulus switch to generate a hash of the output for all three files (private key, CSR, and certificate).
+
+Use the following commands to generate a hash of each file's modulus:
+
+openssl rsa -modulus -in yourdomain.key -noout | openssl sha256
+
+openssl req -modulus -in yourdomain.csr -noout | openssl sha256
+
+openssl x509 -modulus -in yourdomain.crt -noout | openssl sha256
+
+
+Note: The above commands should be entered one by one to generate three separate outputs.
+
+
+
+Each command will output (stdin)= followed by a string of characters. If the output of each command matches, then the keys for each file are the same. However, if there is any mismatch, then the keys are not the same and the certificate cannot be installed.
+
+Key mismatch errors are typically caused by installing a certificate on a machine different from the one used to generate the CSR. If you run into a key mismatch error, you need to do one of the following:
+
+Transfer the private key from the machine used to generate the CSR to the one you are trying to install the certificate on.
+Install the certificate on the machine with the private key.
+Generate an entirely new key and create a new CSR on the machine that will use the certificate.
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+Ref: https://www.digicert.com/kb/ssl-support/openssl-quick-reference-guide.htm
+     https://www.digitalocean.com/community/tutorials/openssl-essentials-working-with-ssl-certificates-private-keys-and-csrs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,67 @@
+
+                                                    
+
+
+                                             Digital Ocean K8 Cluster Connection
+                                            -------------------------------------
+
+
+
+
+
+
+
+Download the conf file from digital ocean and place that in ~/.kube
+
+
+To install and configure doctl:
+-------------------------------
+
+Ref : https://github.com/digitalocean/doctl 
+
+
+==> Use Snap on Snap-supported systems to install doctl:
+
+1- sudo snap install doctl
+
+
+==> Use with kubectl:
+
+Using kubectl requires the kube-config personal-files connection for doctl:
+
+2- sudo snap connect doctl:kube-config
+
+==> Using doctl compute ssh
+
+Using doctl compute ssh requires the core ssh-keys interface:
+
+3- sudo snap connect doctl:ssh-keys :ssh-keys
+
+
+==>If you're not using Docker to run doctl, authenticate with the auth init command.
+
+4- doctl auth init
+
+
+You will be prompted to enter the DigitalOcean access token that you generated in the DigitalOcean control panel.
+
+note :generate yur own token key
+
+DigitalOcean access token: your_DO_token
+
+After entering your token, you will receive confirmation that the credentials were accepted. If the token doesn't validate, make sure you copied and pasted it correctly.
+
+Validating token: OK
+
+
+==>Connecting K8 cluster to terminal 
+
+5-doctl kubernetes cluster kubeconfig save use_your_cluster_name
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
